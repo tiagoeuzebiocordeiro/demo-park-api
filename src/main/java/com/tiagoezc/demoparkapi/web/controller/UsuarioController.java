@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tiagoezc.demoparkapi.entity.Usuario;
 import com.tiagoezc.demoparkapi.service.UsuarioService;
+import com.tiagoezc.demoparkapi.web.dto.UsuarioCreateDto;
+import com.tiagoezc.demoparkapi.web.dto.UsuarioResponseDto;
+import com.tiagoezc.demoparkapi.web.dto.mapper.UsuarioMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,10 +27,16 @@ public class UsuarioController {
 
 	private final UsuarioService usuarioService;
 
+	@GetMapping("/contar")
+    public ResponseEntity<String> contarUsuarios() {
+        int quantidadeUsuarios = usuarioService.contarUsuariosCadastrados();
+        return ResponseEntity.ok("Quantidade de usuários cadastrados: " + quantidadeUsuarios);
+    }
+	
 	@PostMapping
-	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
-		Usuario user = usuarioService.salvar(usuario);
-		return ResponseEntity.status(HttpStatus.CREATED).body(user);
+	public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
 	}
 
 	@GetMapping("/{id}")

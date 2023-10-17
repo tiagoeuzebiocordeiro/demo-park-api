@@ -41,5 +41,9 @@ public class UsuarioService {
 		return usuarioRepository.findAll();
 	}
 
+	public int contarUsuariosCadastrados() {
+		return (int) usuarioRepository.count();
+	}
+
 	
 }
