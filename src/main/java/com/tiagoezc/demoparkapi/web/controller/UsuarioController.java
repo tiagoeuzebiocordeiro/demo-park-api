@@ -16,6 +16,7 @@ import com.tiagoezc.demoparkapi.entity.Usuario;
 import com.tiagoezc.demoparkapi.service.UsuarioService;
 import com.tiagoezc.demoparkapi.web.dto.UsuarioCreateDto;
 import com.tiagoezc.demoparkapi.web.dto.UsuarioResponseDto;
+import com.tiagoezc.demoparkapi.web.dto.UsuarioSenhaDto;
 import com.tiagoezc.demoparkapi.web.dto.mapper.UsuarioMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,6 @@ public class UsuarioController {
 
 	private final UsuarioService usuarioService;
 
-	@GetMapping("/contar")
-    public ResponseEntity<String> contarUsuarios() {
-        int quantidadeUsuarios = usuarioService.contarUsuariosCadastrados();
-        return ResponseEntity.ok("Quantidade de usuários cadastrados: " + quantidadeUsuarios);
-    }
 	
 	@PostMapping
 	public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
@@ -40,21 +36,21 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+	public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
 		Usuario user = usuarioService.buscarPorId(id);
-		return ResponseEntity.ok().body(user);
+		return ResponseEntity.ok().body(UsuarioMapper.toDto(user));
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Usuario> updatePassword(@PathVariable Long id, @RequestBody Usuario usuario) {
-		Usuario user = usuarioService.editarSenha(id, usuario.getPassword());
-		return ResponseEntity.ok(user);
+	public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody UsuarioSenhaDto dto) {
+		Usuario user = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Usuario>> getAll() {
+	public ResponseEntity<List<UsuarioResponseDto>> getAll() {
 		List<Usuario> users = usuarioService.buscarTodos();
-		return ResponseEntity.ok().body(users);
+		return ResponseEntity.ok().body(UsuarioMapper.toListDto(users));
 	}
 	
 }
