@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tiagoezc.demoparkapi.entity.Usuario;
+import com.tiagoezc.demoparkapi.exception.UsernameUniqueViolationException;
 import com.tiagoezc.demoparkapi.repository.UsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,12 @@ public class UsuarioService {
 
 	@Transactional /*Abrir, fechar e gerenciar a transação do método save*/
 	public Usuario salvar(Usuario usuario) {
-		return usuarioRepository.save(usuario);
+		try {
+			return usuarioRepository.save(usuario);
+
+		} catch (org.springframework.dao.DataIntegrityViolationException ex) {
+			throw new UsernameUniqueViolationException(String.format("Username '%s' já cadastrado", usuario.getUsername()));
+		}
 	}
 
 	/*Aviso pro Spring que é apenas de consulta*/
