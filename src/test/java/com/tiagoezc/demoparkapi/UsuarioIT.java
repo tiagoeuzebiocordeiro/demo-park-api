@@ -17,8 +17,8 @@ import com.tiagoezc.demoparkapi.web.dto.UsuarioResponseDto;
  * Sim, mas o teste de p a p tbm é considerado um tipo de teste de integração (ponto a ponto  IT)
  * */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "/sql/usuarios/usuarios-insert.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/sql/usuarios/usuarios-insert.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/resources/sql/usuarios/usuarios-insert.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/resources/sql/usuarios/usuarios-delete.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
 public class UsuarioIT {
 
 	@Autowired
