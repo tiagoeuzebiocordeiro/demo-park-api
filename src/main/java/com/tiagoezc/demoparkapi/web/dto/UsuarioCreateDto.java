@@ -13,7 +13,7 @@ import lombok.ToString;
 public class UsuarioCreateDto {
 
 	@NotBlank
-	@Email(message = "Formato de e-mail inválido.")
+	@Email(regexp = "^(.{2,})@(.{2,})$", message = "Formato de e-mail inválido.")	
 	private String username;
 	@NotBlank
 	@Size(min = 6, max = 6)
